@@ -1,0 +1,14 @@
+{
+  "name": "awstools",
+  "version": "1.0.0",
+  "description": "Tools for AWS and stuff and things",
+  "main": "fake.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "NathanReese",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.493.0"
+  }
+}
