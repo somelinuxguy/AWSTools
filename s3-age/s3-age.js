@@ -1,17 +1,21 @@
 var AWS = require('aws-sdk');
 
-var ageBuckets = function(data) {
+let ageBuckets = (data) => {
     for (i in data.Buckets) {
         let myBucketDate = new Date(data.Buckets[i].CreationDate);
         let result = today.getFullYear() - myBucketDate.getFullYear();
         // console.log(data);
-        if (result >= maxAge) {
-            console.log(`${data.Buckets[i].Name} is over ${maxAge} year old.`); 
+        if (result >= maxBucketAge) {
+            console.log(`${data.Buckets[i].Name} is over ${maxBucketAge} year old.`); 
         } else {
             // debug
-            console.log(`${data.Buckets[i].Name} is NOT over ${maxAge} year old.`);
+            console.log(`${data.Buckets[i].Name} is NOT over ${maxBucketAge} year old.`);
         }
     }
+}
+
+let ageBucketObjects = (data) => {
+
 }
 
 var processBuckets = function() {
@@ -20,13 +24,15 @@ var processBuckets = function() {
             console.log("Error:", err);
         } else {
             ageBuckets(data);
+            ageBucketObjects(data);
         }
     })
 }
 
 // -- main -- //
 const today = new Date();
-const maxAge = 1;
+const maxBucketAge = 1;
+const maxObjectAge = 3;
 s3 = new AWS.S3({region: 'us-east-2', apiVersion: '2006-03-01'});
 
 processBuckets();
