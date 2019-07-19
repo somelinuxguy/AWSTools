@@ -1,21 +1,22 @@
 var AWS = require('aws-sdk');
 
+// evaluate buckets to determine age and report old ones
 let ageBuckets = (data) => {
     for (i in data.Buckets) {
         let myBucketDate = new Date(data.Buckets[i].CreationDate);
         let result = today.getFullYear() - myBucketDate.getFullYear();
         // console.log(data);
-        if (result >= maxBucketAge) {
-            console.log(`${data.Buckets[i].Name} is over ${maxBucketAge} year old.`); 
-        } else {
-            // debug
-            console.log(`${data.Buckets[i].Name} is NOT over ${maxBucketAge} year old.`);
-        }
+        if (result >= maxBucketAge) console.log(`${data.Buckets[i].Name} is over ${maxBucketAge} year old.`); 
     }
 }
 
-let evaluateObjects = (data) => {
-
+// evaluate all the objects returned to determine if they are over maxObjectAge years old
+let evaluateObjects = (objData) => {
+    for (i in objData.Contents) {
+         let currentObjDate = new Date(objData.Contents[i].LastModified)
+         let result = today.getFullYear() - currentObjDate.getFullYear();
+         if (result > maxObjectAge) console.log(`${objData.Contents[i].Key} is ${result} years old`);
+    }
 }
 
 let ageBucketObjects = (data) => {
@@ -25,11 +26,11 @@ let ageBucketObjects = (data) => {
         MaxKeys: '1000',
         // StartAfter: 'STRING_VALUE'  // subsequent calls cursor perhaps?
     };
-    s3.listObjectsV2(params, function(err, data) {
-        if (err) {
-            console.log(err, err.stack);
+    s3.listObjectsV2(params, function(objErr, objData) {
+        if (objErr) {
+            console.log(objErr, objErr.stack);
         } else {
-            evaluateObjects(data);
+            evaluateObjects(objData);
         }
     });
 }
