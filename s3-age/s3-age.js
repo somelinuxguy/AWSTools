@@ -14,8 +14,24 @@ let ageBuckets = (data) => {
     }
 }
 
-let ageBucketObjects = (data) => {
+let evaluateObjects = (data) => {
 
+}
+
+let ageBucketObjects = (data) => {
+    var params = {
+        Bucket: data.Buckets[0].Name,   //Index 0 for now.
+        // Delimiter: 'STRING_VALUE',  // using '/' would be interesting
+        MaxKeys: '1000',
+        // StartAfter: 'STRING_VALUE'  // subsequent calls cursor perhaps?
+    };
+    s3.listObjectsV2(params, function(err, data) {
+        if (err) {
+            console.log(err, err.stack);
+        } else {
+            evaluateObjects(data);
+        }
+    });
 }
 
 var processBuckets = function() {
